@@ -1,6 +1,6 @@
 {
   "name": "date-differ",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Calculate difference between two dates",
   "main": "./lib/diff-to-string.js",
   "bin": "./bin/cli.js",
