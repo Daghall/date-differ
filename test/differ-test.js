@@ -108,6 +108,16 @@ describe("differ test", () => {
     expect(result).to.deep.equal({months: 11, days: 30, totalDays: 365});
   });
 
+  it("one year, minus one month", () => {
+    const result = differ({from: "2019-12-24", to: "2020-11-24"});
+    expect(result).to.deep.equal({months: 11, totalDays: 336});
+  });
+
+  it("one year, minus one month and one day", () => {
+    const result = differ({from: "2019-12-24", to: "2020-11-23"});
+    expect(result).to.deep.equal({months: 10, days: 30, totalDays: 335});
+  });
+
   it("20th of August to the last of September", () => {
     const result = differ({from: "2020-08-20", to: "2020-09-30"});
     expect(result).to.deep.equal({months: 1, days: 10, totalDays: 41});
@@ -128,13 +138,18 @@ describe("differ test", () => {
     expect(result).to.deep.equal({days: 30, totalDays: 30});
   });
 
-  it("31 of August to the first of October", () => {
+  it("31st of August to the first of October", () => {
     const result = differ({from: "2020-08-31", to: "2020-10-01"});
     expect(result).to.deep.equal({months: 1, days: 1, totalDays: 31});
   });
 
-  it("30 of August to the first of October", () => {
+  it("30th of August to the first of October", () => {
     const result = differ({from: "2020-08-30", to: "2020-10-01"});
     expect(result).to.deep.equal({months: 1, days: 2, totalDays: 32});
+  });
+
+  it("31st of August to the first of October, one year apart", () => {
+    const result = differ({from: "2019-08-31", to: "2020-10-01"});
+    expect(result).to.deep.equal({years: 1, months: 1, days: 1, totalDays: 397});
   });
 });
