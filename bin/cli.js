@@ -21,6 +21,9 @@ function cli(argv, nodeProcess) {
 
       if (options.from && options.to) {
         throw new Error("Too many/ambiguous arguments");
+      } else if (/^[-+]/.test(date)) {
+        options.to = date;
+        options.relativeDate = true;
       } else {
         const today = new Date().toISOString().split("T")[0];
 
@@ -43,6 +46,8 @@ function cli(argv, nodeProcess) {
 
       delete options._anonymous;
     }
+
+    console.log({options}); // eslint-disable-line no-console
 
     if (!options.from && !options.to) throw new Error("At least one of the parameters \"to\" and \"from\" must be provided");
     const result = diffToString(options);
