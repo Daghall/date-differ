@@ -3,6 +3,7 @@
 "use strict";
 
 const parseArgv = require("../lib/parse-argv.js");
+const dateString = require("../lib/date-string.js");
 const diffToString = require("../lib/diff-to-string.js");
 
 const flags = [
@@ -21,8 +22,10 @@ function cli(argv, nodeProcess) {
 
       if (options.from && options.to) {
         throw new Error("Too many/ambiguous arguments");
+      } else if (/^[-+]/.test(date)) {
+        options.to = date;
       } else {
-        const today = new Date().toISOString().split("T")[0];
+        const today = dateString(new Date());
 
         if (options.from || (!date2 && !options.to && date > today)) {
           options.to = date;
@@ -51,11 +54,14 @@ function cli(argv, nodeProcess) {
   } catch (e) {
     nodeProcess.stderr.write(`${e.message}\n`);
     nodeProcess.stdout.write([
-      "\nUsage: date-differ [-f] <date> [[-t] <date>] [-d]",
+      "\nUsage: date-differ [-f] <date> [[-t] <date | <relative>...>] [-d]",
       "\nParameters: \n",
       "   -f, --from,  Date from, valid JavaScript date format\n",
-      "   -t, --to,    Date to, valid JavaScript date format\n",
+      "   -t, --to,    Date to, valid JavaScript date format,\n",
+      "                or one or more relative segments\n",
       "   -d, --days,  Only print days\n",
+      "\nRelative segments: \n",
+      "   <+|-><number><unit>, where unit is one of \"d(ay[s])\", \"w(eek[s])\", \"m(onth[s])\" , \"y(ear[s])\" \n",
     ].join(""));
   }
 }

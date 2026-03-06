@@ -32,6 +32,48 @@ describe("parseArgv", () => {
     });
   });
 
+  it("mix of named and anonymous arguments", () => {
+    const argv = baseArgs.concat([
+      "-a=alpha",
+      "anonymous1",
+      "anonymous2",
+    ]);
+    const flags = [
+      {short: "a", long: "alpha"},
+    ];
+    const result = parseArgv(argv, flags);
+    expect(result).to.deep.equal({
+      alpha: "alpha",
+      _anonymous: [
+        "anonymous1",
+        "anonymous2",
+      ],
+    });
+  });
+
+  it("anonymous argument beginning with `-`", () => {
+    const argv = baseArgs.concat(["-3w"]);
+    const flags = [];
+    const result = parseArgv(argv, flags);
+    expect(result).to.deep.equal({
+      _anonymous: ["-3w"],
+    });
+  });
+
+  it("anonymous argument beginning with `-`, following a named argument", () => {
+    const argv = baseArgs.concat([
+      "-f",
+      "-3w",
+    ]);
+    const flags = [
+      { short: "f", long: "from" },
+    ];
+    const result = parseArgv(argv, flags);
+    expect(result).to.deep.equal({
+      from: "-3w",
+    });
+  });
+
   it("short form", () => {
     const argv = baseArgs.concat([
       "-a",

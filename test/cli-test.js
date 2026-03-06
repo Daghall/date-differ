@@ -131,4 +131,33 @@ describe("cli test", () => {
     expect(fakeProcess.stdout.write).to.have.been.called.once;
     expect(fakeProcess.stderr.write).to.not.have.been.called;
   });
+
+  describe("relative dates", () => {
+    it("one anonymous parameter", () => {
+      cli(baseArgs.concat("-2w"), fakeProcess);
+      expect(diffToString).to.have.been.called.once.with.exactly({
+        to: "-2w",
+      });
+      expect(fakeProcess.stdout.write).to.have.been.called.once;
+      expect(fakeProcess.stderr.write).to.not.have.been.called;
+    });
+
+    it("one named parameter - to", () => {
+      cli(baseArgs.concat("-t", "-2w"), fakeProcess);
+      expect(diffToString).to.have.been.called.once.with.exactly({
+        to: "-2w",
+      });
+      expect(fakeProcess.stdout.write).to.have.been.called.once;
+      expect(fakeProcess.stderr.write).to.not.have.been.called;
+    });
+
+    it("one named parameter - from", () => {
+      cli(baseArgs.concat("-f", "-2w"), fakeProcess);
+      expect(diffToString).to.have.been.called.once.with.exactly({
+        from: "-2w",
+      });
+      expect(fakeProcess.stdout.write).to.have.been.called.once;
+      expect(fakeProcess.stderr.write).to.have.not.have.been.called;
+    });
+  });
 });

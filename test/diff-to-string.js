@@ -76,7 +76,9 @@ describe("date diff", () => {
       });
 
       it("one day, different years", () => {
-        const result = diffToString({from: "2020-12-31", to: "2021-01-01"});
+        const from = new Date("2020-12-31");
+        const to = new Date("2021-01-01");
+        const result = diffToString({from, to});
         expect(result).to.equal("1 day");
       });
     });
@@ -126,7 +128,7 @@ describe("date diff", () => {
     });
 
     describe("two date parameters", () => {
-      it("two days, three month ago", () => {
+      it("two days, three months ago", () => {
         const result = diffToString({from: "2020-09-24", to: "2020-12-24", days: true});
         expect(result).to.equal("91 days");
       });
@@ -149,6 +151,98 @@ describe("date diff", () => {
       it("one day, different years", () => {
         const result = diffToString({from: "2020-12-31", to: "2021-01-01", days: true});
         expect(result).to.equal("1 day");
+      });
+    });
+  });
+
+  describe("relative date", () => {
+    describe("one parameter", () => {
+      it("two days, three months ago", () => {
+        const result = diffToString({to: "-3m2d"});
+        expect(result).to.equal("2020-09-22");
+      });
+
+      it("two days, three months ahead", () => {
+        const result = diffToString({to: "+3m2d"});
+        expect(result).to.equal("2021-03-26");
+      });
+
+      it("three weeks, minus one day, ahead", () => {
+        const result = diffToString({to: "+3w-1d"});
+        expect(result).to.equal("2021-01-13");
+      });
+
+      it("three weeks ago, plus one day", () => {
+        const result = diffToString({to: "-3w+1d"});
+        expect(result).to.equal("2020-12-04");
+      });
+
+      it("zero units", () => {
+        const result = diffToString({to: "-0w0d+0y0m"});
+        expect(result).to.equal("2020-12-24");
+      });
+
+      it("relative time in \"from\" parameter", () => {
+        const fn = diffToString.bind(null, ({from: "-2w"}));
+        expect(fn).to.throw(TypeError, "Parameter \"from\" is not a valid date: -2w");
+      });
+    });
+
+    describe("two parameters", () => {
+      it("two days, three months ago", () => {
+        const result = diffToString({from: "2025-01-17", to: "-3m2d"});
+        expect(result).to.equal("2024-10-15");
+      });
+
+      it("two days, three months ahead", () => {
+        const result = diffToString({from: "2025-01-17", to: "+3m2d"});
+        expect(result).to.equal("2025-04-19");
+      });
+
+      it("three weeks, minus one day, ahead", () => {
+        const result = diffToString({from: "2025-01-17", to: "+3w-1d"});
+        expect(result).to.equal("2025-02-06");
+      });
+
+      it("three weeks ago, plus one day", () => {
+        const result = diffToString({from: "2025-01-17", to: "-3w+1d"});
+        expect(result).to.equal("2024-12-28");
+      });
+
+      it("one month after January 31st", () => {
+        const result = diffToString({from: "2025-01-31", to: "+1m"});
+        expect(result).to.equal("2025-02-28");
+      });
+
+      it("one month before February 28th", () => {
+        const result = diffToString({from: "2025-02-28", to: "-1m"});
+        expect(result).to.equal("2025-01-28");
+      });
+
+      it("three months and two days after March 31st", () => {
+        const from = new Date("2025-03-31");
+        const result = diffToString({from, to: "+3m2d"});
+        expect(result).to.equal("2025-07-02");
+      });
+
+      it("one year, from leap day", () => {
+        const from = new Date("2020-02-29");
+        const result = diffToString({from, to: "+1y"});
+        expect(result).to.equal("2021-02-28");
+
+      });
+
+      it("one year ago, from leap day", () => {
+        const from = new Date("2020-02-29");
+        const result = diffToString({from, to: "-1y"});
+        expect(result).to.equal("2019-02-28");
+      });
+    });
+
+    describe("incompatible flags", () => {
+      it("is not compatible with the `days` flag", () => {
+        const fn = diffToString.bind(null, {to: "-3w+1d", days: true});
+        expect(fn).to.throw(TypeError, "Relative dates are not supported with the `days` flag");
       });
     });
   });
