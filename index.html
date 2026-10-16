@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Date differ</title>
+    <link rel="stylesheet" href="www/style.css">
+  </head>
+  <body>
+    <h1>Date differ</h1>
+
+    <main>
+      <table>
+      </table>
+    </main>
+
+    <template id="table">
+      <tr>
+        <th>Event</th>
+        <th>Date</th>
+        <th colspan="2">Today</th>
+      </tr>
+    </template>
+
+    <aside>
+      <form>
+        <div>
+          <label for="event-name" title="Event name">Event name</label><input type="text" id="event-name" placeholder="My birthday" tabindex="1">
+        </div>
+        <div>
+          <label for="date" title="Date">Date</label><input type="text" id="date" placeholder="2026-01-09" tabindex="2">
+         <input type="checkbox" id="toggle-datepicker" tabindex="3"><label for="toggle-datepicker" title="Show date picker">Show date picker</label>
+        </div>
+        <div>
+          <button type="button" id="add-date">Add date</button>
+          <button type="reset" tabindex="-1">Reset</button>
+        </div>
+        <div id="result"></div>
+        <div id="error"></div>
+      </form>
+    <div>
+      <br>
+      <a href="https://github.com/Daghall/date-differ">Code, npm, and more...</a>
+    </div>
+    <script src="./www/require-polyfill.js" data-main="./www/web.js" data-project-root="../"></script>
+  </body>
+</html>

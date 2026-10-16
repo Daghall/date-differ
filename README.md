@@ -1,9 +1,12 @@
 # date-differ
+
 Calculate difference between two dates, with the resolution of days.
 
 Or calculate date relative to a given date using a relative date format.
 
 Any date not given is defaulted to the current date.
+
+Interactive demo: https://daghall.github.io/date-differ/
 
 
 ## Relative dates
